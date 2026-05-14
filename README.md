@@ -78,9 +78,3 @@ Se puede agregar el mismo producto varias veces; cada aparición figura como una
 
 - El catálogo está definido en código para facilitar pruebas; no hay persistencia en archivo ni base de datos.
 - Si en la opción 1 se ingresa un número fuera del rango del catálogo, el programa puede lanzar un error (comportamiento no validado en esta versión).
-
----
-
-## Licencia
-
-Uso académico / proyecto personal según lo indique tu curso o repositorio.
