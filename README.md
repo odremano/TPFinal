@@ -75,8 +75,6 @@ Para ejecutar las pruebas unitarias, ejecutar el siguiente comando:
 ```bash
 python3 test_carrito.py 
 ```
-<img width="2816" height="1536" alt="Gemini_Generated_Image_ilq30ilq30ilq30i" src="https://github.com/user-attachments/assets/a02f9392-7f44-4f8a-947c-d5b65704f884" />
-
 
 ### Uso del menú
 
