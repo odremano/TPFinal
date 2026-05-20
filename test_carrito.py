@@ -3,6 +3,7 @@
   TRABAJO PRÁCTICO FINAL — Punto 2: Diseño del Conjunto de Pruebas
   Materia: Control de Calidad de Software
   Sistema bajo prueba: Carrito de Compras (POO) — carrito.py
+  Para su ejecución, ejecutar el comando: python3 test_carrito.py
 ================================================================================
 
 Tipos de prueba implementados:
