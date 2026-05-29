@@ -1,4 +1,4 @@
-# Trabajo Práctico Final - Testeo de Software (Sprint 1)
+# Trabajo Práctico Final - Testeo de Software (Sprint 1 y 2)
 
 **Institución:** Universidad de Belgrano  
 **Proyecto:** Sistema de Gestión de Carrito de Compras (POO)
@@ -44,6 +44,9 @@ El diseño se basa en la interacción de dos entidades principales:
 
 Además, la función `menu()` concentra el catálogo precargado y el bucle de la CLI (opciones 1–3).
 
+<img width="2816" height="1536" alt="Gemini_Generated_Image_ilq30ilq30ilq30i" src="https://github.com/user-attachments/assets/f02b1dce-2671-4df6-8690-8eecb9c1343d" />
+
+
 ---
 
 ## 3. Código Fuente e Instrucciones
@@ -64,6 +67,13 @@ En Linux o macOS, si preferís explícitamente el intérprete `python3`:
 
 ```bash
 python3 carrito.py
+```
+### Ejecución de los tests
+
+Para ejecutar las pruebas unitarias, ejecutar el siguiente comando:
+
+```bash
+python3 test_carrito.py 
 ```
 
 ### Uso del menú
