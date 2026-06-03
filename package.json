@@ -1,0 +1,11 @@
+{
+    "name": "tp-testing-carrito",
+    "version": "1.0.0",
+    "description": "Suite E2E - Carrito de Compras",
+    "scripts": {
+      "test:e2e": "playwright test --reporter=list"
+    },
+    "devDependencies": {
+      "@playwright/test": "^1.56.0"
+    }
+  }
