@@ -243,3 +243,61 @@ Se puede agregar el mismo producto varias veces; cada aparición figura como una
 ├── package.json                      # Dependencias Node.js
 └── README.md
 ```
+### Defectos intencionales y pruebas diseñadas para detectarlos
+
+Con fines pedagógicos, `carrito.py` incluye **tres defectos deliberados** que permiten validar la efectividad del conjunto de pruebas. Al ejecutar las suites con el código defectuoso, los tests listados a continuación **deben fallar**; al corregir cada defecto, las pruebas asociadas vuelven a pasar.
+
+| ID | Tipo de defecto | Ubicación | Descripción | Corrección |
+|----|-----------------|-----------|-------------|------------|
+| D-01 | Lógica | `calcular_total()` | El total queda **$1 por debajo** del valor correcto (`sum(...) - 1`). | Eliminar el `- 1`. |
+| D-02 | Funcionalidad | `mostrar_resumen()` | No se informa al usuario cuando el carrito está **vacío** (línea comentada). | Descomentar `print("El carrito está vacío.")`. |
+| D-03 | Formato / parámetro | `mostrar_resumen()` | Los precios de ítems se muestran **sin dos decimales** (`.0f` en lugar de `.2f`). | Usar `:.2f` en el formato de cada producto. |
+
+#### Pruebas unitarias que fallan (`test_carrito.py`)
+
+| Defecto | ID test | Clase | Qué verifica |
+|---------|---------|-------|--------------|
+| **D-01** | CC-01 | `TestCarrito` | Carrito vacío: total esperado `0`, obtenido `-1`. |
+| **D-01** | CC-02 | `TestCarrito` | Un producto: total esperado `1500.00`, obtenido `1499.00`. |
+| **D-01** | CC-03 | `TestCarrito` | Varios productos: suma incorrecta (`1524.50` vs `1525.50`). |
+| **D-01** | CC-04 | `TestCarrito` | Mismo producto ×2: total incorrecto (`50.00` vs `51.00`). |
+| **D-01** | INT-01 | `TestIntegracion` | Flujo completo: total `$1570.50` incorrecto. |
+| **D-01** | RD-02 | `TestRendimiento` | `calcular_total()` con 10.000 ítems: espera `10000.0`, obtiene `9999.0`. |
+| **D-01** | RD-03 | `TestRendimiento` | Suma de 1000 × `$0.10`: espera `100.00`, obtiene `99.00`. |
+| **D-02** | CC-06 | `TestCarrito` | `mostrar_resumen()` con carrito vacío debe contener `"vacío"`. |
+| **D-02** | CB-01 | `TestCajaNegra` | Al consultar carrito vacío desde `menu()`, debe aparecer `"vacío"`. |
+| **D-02** | CAM-02 | `TestCamino` | Opción 2 con carrito vacío: rama `"vacío"`. |
+| **D-02** | CAM-04 | `TestCamino` | `mostrar_resumen()` con lista vacía (rama M1). |
+| **D-03** | IF-03 | `TestInterfazConsola` | Resumen debe mostrar `$1500.00` (con dos decimales). |
+| **D-03** | CAM-05 | `TestCamino` | Resumen con Teclado debe incluir `"45.00"`. |
+| **D-01 + D-03** | INT-02 | `TestIntegracion` | Resumen debe incluir total `"1545.00"` (formato y cálculo). |
+| **D-01 + D-02 + D-03** | CB-02 | `TestCajaNegra` | Notebook agregado: espera `"1500.00"` en salida. |
+| **D-01 + D-03** | CB-03 | `TestCajaNegra` | Mouse + Teclado: espera `"70.50"` en total. |
+| **D-01 + D-03** | CB-04 | `TestCajaNegra` | Notebook ×2: espera `"3000.00"`. |
+
+**Resumen unitario con defectos activos:** aproximadamente **17 de 33** pruebas fallan.  
+**Pruebas que siguen pasando** (no cubren esos defectos): p. ej. CP-01 a CP-04, CC-05, CC-07, INT-03, CB-05, RD-01, IF-01, IF-02, IF-04, IF-05, CAM-01, CAM-03, CAM-06.
+
+#### Pruebas E2E que fallan (`tests/e2e_carrito.spec.js`)
+
+| Defecto | ID | Qué verifica |
+|---------|-----|--------------|
+| **D-02** | E2E-01 | Consultar carrito vacío: debe contener `"vacío"`. |
+| **D-01 + D-03** | E2E-02 | Compra simple: `$1500.00` en ítem y `TOTAL: $1500.00`. |
+| **D-01 + D-03** | E2E-03 | Tres productos: `TOTAL: $1570.50`. |
+| **D-01 + D-03** | E2E-04 | Notebook ×2: `TOTAL: $3000.00`. |
+| **D-01 + D-03** | E2E-05 | Totales parcial (`$25.50`) y final (`$70.50`). |
+| **D-02 + D-01** | E2E-07 | Mensaje `"vacío"` al menos 2 veces + `TOTAL: $1500.00`. |
+| **D-01 + D-03** | E2E-08 | Formato `$25.50` y `TOTAL: $25.50` en resumen. |
+
+**Resumen E2E con defectos activos:** **7 de 8** pruebas fallan.  
+**E2E-06** (salida inmediata sin operar) sigue pasando porque no valida totales ni carrito vacío.
+
+#### Ejecución con defectos activos (resultado esperado)
+
+```bash
+python3 test_carrito.py
+# Esperado: 18 FAIL, 15 OK
+
+npx playwright test --reporter=list
+# Esperado: 7 FAIL, 1 OK (E2E-06)
